@@ -97,7 +97,7 @@ app.post('/login', async (req, res) => {
 Pour améliorer la lisibilité et la maintenabilité de ton code, il est recommandé de séparer les responsabilités en plaçant les données des utilisateurs dans un fichier distinct. 
 
 Pour cela, il faudra 
-1. Créer un fichier `users.js` dans /data
+1. Créer un fichier `users.json` dans /data
 2. Modifier les méthodes dans `index.js` pour qu'elles lisent et écrivent les nouvelles données.  
 
 
