@@ -1,106 +1,68 @@
-# 🔐 TP : Authentification avec Express, Bcrypt et JWT
+# 🔐 TP Partie 2 : Structuration des Routes avec express.Router()
 
 ## 🎯 Objectifs
 
-- Créer une API Express avec un système d'inscription et de connexion
-- Stocker les utilisateurs en mémoire
-- Sécuriser les mots de passe avec **bcrypt**
-- Gérer l’authentification avec **JWT**
+- Organiser les routes de l'application de manière modulaire.
+
+- Utiliser express.Router() pour regrouper les routes liées aux utilisateurs.
+
+- Mettre en place une nouvelle branche Git pour gérer ces modifications.
 
 ---
 
-## 🛠️ Étape 1 : Création du projet Express
+## 🗂️ Etape 1 : Création du Dossier router et du Fichier users.js
 
-```bash
-npm init -y
-npm install express jsonwebtoken bcrypt
-npm install nodemon --save-dev
-```
+Créez un dossier router à la racine de votre projet, puis un fichier users.js à l'intérieur :
 
-Ajoutez un script dans le `package.json` :
-```js
-"scripts": {
-  "dev": "nodemon index.js"
-}
-```
+## 🛠️ Etape 2 : Déplacement des Routes /login et /register dans users.js
 
-## 📁 Étape 2 : Mise en place du serveur
-
-Créez le fichier `index.js` :
+Dans `router/users.js`, importez Express et créez un routeur :
 
 ```js
 const express = require('express');
+const router = express.Router();
+
+```
+
+Déplacez ensuite les routes /login et /register dans ce fichier
+
+N'oubliez pas d'exporter le routeur à la fin du fichier :
+
+```js
+module.exports = router; 
+```
+
+## 🔗 Etape 3 : Intégration du Routeur dans index.js
+
+Dans votre fichier principal `index.js`, importez le routeur et montez-le sur le chemin `/users` :
+
+```
+const express = require('express');
 const app = express();
-app.use(express.json());
+const usersRouter = require('./router/users');
 
-app.listen(3000, () => console.log('🚀 Serveur lancé sur http://localhost:3000'));
-
+app.use('/users', usersRouter);
 ```
 
-## 👤 Étape 3 : Création du modèle User
+Avec cette configuration, les routes seront accessibles via :
+- POST `/users/register`
+- POST `/users/login`
 
-Version simple en mémoire :
+## 🌿 Etpae 4 : Gestion de la Branche Git feat_router
 
-```
-const users = []; // [{ email, passwordHash }]
-```
+Pour suivre les bonnes pratiques de développement, créez une nouvelle branche Git pour ces modifications :
 
-## 🔐 Étape 4 : Route /register (Inscription)
-
-```js
-const bcrypt = require('bcrypt');
-
-app.post('/register', async (req, res) => {
-  const { email, password } = req.body;
-
-  const userExists = users.find(user => user.email === email);
-  if (userExists) return res.status(400).json({ message: 'Utilisateur déjà inscrit' });
-
-  const passwordHash = await bcrypt.hash(password, 10);
-  users.push({ email, passwordHash });
-
-  res.status(201).json({ message: 'Utilisateur créé ✅' });
-});
+```bash
+git checkout -b feat_router
+git add .
+git commit -m "Structuration des routes utilisateurs avec express.Router()"
+git push origin feat_router
 ```
 
-## 🔑 Étape 5 : Route /login (Connexion)
+## ✅ Résumé
 
-```js
-const jwt = require('jsonwebtoken');
-const SECRET = 'monsecretdev'; // à stocker dans une variable d'environnement normalement. Bonus 
+- Les routes liées aux utilisateurs sont désormais regroupées dans un fichier dédié pour une meilleure organisation.
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+- L'utilisation de express.Router() facilite la maintenance et l'évolution de votre application.
 
-  const user = users.find(user => user.email === email);
-  if (!user) return res.status(401).json({ message: 'Identifiants invalides' });
-
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) return res.status(401).json({ message: 'Mot de passe incorrect' });
-
-  const token = jwt.sign({ email }, SECRET, { expiresIn: '1h' });
-  res.json({ token });
-});
-
-```
-
-## 🔍 Tests à faire avec Thunder Client
-
-    ✅ POST /register avec { "email": "alice@example.com", "password": "1234" }
-
-    ✅ POST /login avec les bons identifiants → vous recevez un token
-
-    ❌ POST /login avec un mauvais mot de passe → erreur 401
-
-## 🧹 Modularité 
-
-Pour améliorer la lisibilité et la maintenabilité de ton code, il est recommandé de séparer les responsabilités en plaçant les données des utilisateurs dans un fichier distinct. 
-
-Pour cela, il faudra 
-1. Créer un fichier `users.json` dans /data
-2. Modifier les méthodes dans `index.js` pour qu'elles lisent et écrivent les nouvelles données.  
-
-
-
-
-
+- La gestion des branches Git permet de suivre l'historique des modifications de manière claire et structurée.
