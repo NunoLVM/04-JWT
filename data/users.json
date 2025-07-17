@@ -1,0 +1,14 @@
+[
+  {
+    "email": "teste@example.com",
+    "passwordHash": "$2b$10$dUWDmvlySvBZ4Pifrs4XKuZ40xqrrKHd2xf16GAr9qsJAqt1X/KDS"
+  },
+  {
+    "email": "nuno@example.com",
+    "passwordHash": "$2b$10$lZKCYTnL8vz6RCLz7s9BNOYNHWdeoUcRuSjI3Sg6hNv.IjiY2apP6"
+  },
+  {
+    "email": "nunoooooo@example.com",
+    "passwordHash": "$2b$10$pEiQoI5/ClTwYhfECgv2teotQaIDxb3D063XlkkJasnvlGzdZnyAm"
+  }
+]
